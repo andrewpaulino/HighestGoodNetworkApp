@@ -401,29 +401,15 @@ class AddUserProfile extends Component {
   }
 
   onCreateNewUser = () => {
-    this.props.fetchAllProjects()
+    let {allProjects} = this.props.fetchAllProjects();
+    
+    const initialUserProject = this.props.allProjects.projects.filter((project) => {
+      if (project.projectName === 'Orientation and Initial Setup'){
+        return project;
+      }
+    });
 
-    const initialUserProject = this.props.allProjects.projects.filter(
-      ({ projectName }) => projectName === 'Orientation and Initial Setup',
-    )
-
-    this.setState({ projects: initialUserProject })
-  }
-
-  fieldsAreValid = () => {
-    const firstLength = this.state.userProfile.firstName !== ''
-    const lastLength = this.state.userProfile.lastName !== ''
-    const phone = this.state.userProfile.phoneNumber
-
-    if (phone === null) {
-      toast.error('Phone Number is required')
-      return false
-    } else if (firstLength && lastLength && phone.length > 10) {
-      return true
-    } else {
-      toast.error('Please fill all the required fields')
-      return false
-    }
+    this.setState({projects: initialUserProject});
   }
 
   createUserProfile = () => {
