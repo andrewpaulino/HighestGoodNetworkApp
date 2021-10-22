@@ -74,8 +74,7 @@ class AddUserProfile extends Component {
   }
 
   componentDidMount() {
-    this.state.showphone = true
-    this.onCreateNewUser()
+    this.onCreateNewUser();
   }
 
   render() {
@@ -401,13 +400,9 @@ class AddUserProfile extends Component {
   }
 
   onCreateNewUser = () => {
-    let {allProjects} = this.props.fetchAllProjects();
+    this.props.fetchAllProjects();
     
-    const initialUserProject = this.props.allProjects.projects.filter((project) => {
-      if (project.projectName === 'Orientation and Initial Setup'){
-        return project;
-      }
-    });
+    const initialUserProject = this.props.allProjects.projects.filter(({projectName}) => projectName === 'Orientation and Initial Setup');
 
     this.setState({projects: initialUserProject});
   }
