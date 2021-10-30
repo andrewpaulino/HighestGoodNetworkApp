@@ -117,8 +117,8 @@ describe('user management', () => {
       expect(screen.queryByRole('button', { name: /pause/i })).toBeFalsy();
     });
     it('should perform wildcard search while the user typing in the search box', async () => {
-      await userEvent.type(screen.getByPlaceholderText(/search text/i), 'gmail.com', { allAtOnce: false });
-      // expect(screen.queryByText(/.*hgn.net.*/)).toBeFalsy();
+      await userEvent.type(screen.getByPlaceholderText(/Search Text/i), 'gmail.com', { allAtOnce: false });
+      expect(screen.queryByText(/.*hgn.net.*/)).toBeFalsy();
     });
   });
 });
