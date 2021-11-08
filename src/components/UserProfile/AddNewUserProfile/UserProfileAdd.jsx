@@ -25,6 +25,9 @@ import TeamsTab from '../TeamsAndProjects/TeamsTab'
 import ProjectsTab from '../TeamsAndProjects/ProjectsTab'
 import { connect } from 'react-redux'
 import _ from 'lodash'
+
+import { getUserTimeZone } from 'services/timeZoneService'
+
 import { getUserProfile, updateUserProfile, clearUserProfile } from '../../../actions/userProfile'
 import {
   getAllUserTeams,
@@ -33,7 +36,7 @@ import {
   addTeamMember,
 } from '../../../actions/allTeamsAction'
 
-import { fetchAllProjects } from 'actions/projects'
+import { fetchAllProjects } from '../../../actions/projects';
 
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
@@ -266,7 +269,28 @@ class AddUserProfile extends Component {
                   </Col>
                 </Row>
                 <Row>
-                  <Col md={{ size: 3, offset: 1 }} className="text-md-right my-2">
+                  <Col md={{size: 4, offset:0}} className="text-md-right my-2">
+                    <Label>Location</Label>
+                  </Col>
+                  <Col md="6">
+                    <Row>
+                      <Col md="6">
+                        <Input
+                          onChange={(e) => this.setState({...this.state, location: e.target.value})}
+                        />
+                      </Col>
+                      <Col md="6">
+                        <div className="w-100 pt-1 mb-2 mx-auto">
+                          <Button color="secondary" block size="sm" onClick={this.onClickGetTimeZone}>
+                          Get Time Zone
+                          </Button>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={{size: 3, offset:1}} className="text-md-right my-2">
                     <Label>Time Zone</Label>
                   </Col>
                   <Col md="6">
@@ -277,18 +301,6 @@ class AddUserProfile extends Component {
                         selected={'America/Los_Angeles'}
                       />
                     </FormGroup>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={{ size: 4, offset: 0 }} className="text-md-right my-2">
-                    <Label>Search For Time Zone</Label>
-                  </Col>
-                  <Col md="6">
-                    <Input
-                      onChange={e =>
-                        this.setState({ ...this.state, timeZoneFilter: e.target.value })
-                      }
-                    />
                   </Col>
                 </Row>
               </Form>
@@ -350,7 +362,6 @@ class AddUserProfile extends Component {
             </Col>
           </Row>
           <Row>
-            {/* <Col></Col> */}
             <Col md="12">
               <div className="w-50 pt-4 mx-auto">
                 <Button color="primary" block size="lg" onClick={this.createUserProfile}>
@@ -397,6 +408,28 @@ class AddUserProfile extends Component {
     this.setState({
       projects: projects,
     })
+  }
+
+  // Function to call TimeZoneService with location and key 
+  onClickGetTimeZone = () => {
+    const location = this.state.location;
+    const key = this.props.timeZoneKey;
+    if(!location){
+      alert('Please enter valid location');
+      return;
+    }
+    if(key) {
+      getUserTimeZone(location,key).then((response)=>{
+        if(response.data.status.code === 200 && response.data.results && response.data.results.length){
+          let timezone = response.data.results[0].annotations.timezone.name;
+          this.setState({...this.state, timeZoneFilter: timezone});
+        }
+        else {
+          alert('Invalid location or '+response.data.status.message);
+        }
+      })
+      .catch(err => console.log(err));
+    }
   }
 
   onCreateNewUser = () => {
@@ -736,8 +769,9 @@ const mapStateToProps = state => ({
   userProjects: state.userProjects,
   allProjects: _.get(state, 'allProjects'),
   allTeams: state,
+  timeZoneKey: state.timeZoneAPI.userAPIKey,
   state,
-})
+});
 
 export default connect(mapStateToProps, {
   getUserProfile,
