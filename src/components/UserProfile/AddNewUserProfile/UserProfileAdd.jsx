@@ -45,7 +45,6 @@ class AddUserProfile extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      weeklyCommittedHours: 10,
       teams: [],
       projects: [],
       activeTab: '1',
@@ -454,7 +453,8 @@ class AddUserProfile extends Component {
       jobTitle: jobTitle,
       phoneNumber: phoneNumber,
       bio: '',
-      weeklyCommittedHours: that.state.userProfile.weeklyCommittedHours,
+      // weeklyComittedHours mispelled for req body to match backend
+      weeklyComittedHours: that.state.userProfile.weeklyCommittedHours,
       personalLinks: [],
       adminLinks: [],
       teams: this.state.teams,
@@ -477,6 +477,7 @@ class AddUserProfile extends Component {
         if (!email.match(patt)) {
           toast.error('Email is not valid,Please include @ followed by .com format')
         } else {
+          console.log('req userData: ', userData)
           createUser(userData)
             .then(res => {
               if (res.data.warning) {
