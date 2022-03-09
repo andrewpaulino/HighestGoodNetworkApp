@@ -81,7 +81,7 @@ const TeamMemberTasks = (props) => {
         const taskNotificationPromises = [];
         const allManagingTeams = [];
 
-        // fetch all team members for each time
+        // fetch all team members for each team
         managingTeams.forEach((team) => {
             teamMembersPromises.push(httpService.get(ENDPOINTS.TEAM_MEMBERS(team._id)));
         });
@@ -239,7 +239,6 @@ const TeamMemberTasks = (props) => {
       fetchData();
     }, []);
 
-    // rest of component 
     let teamsList = [];
     if (teams && teams.length > 0) {
       teamsList = teams.map((member, index) => (
