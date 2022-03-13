@@ -179,12 +179,14 @@ export const assignBadgesByUserID = (userId, selectedBadges) => {
     }
     const badgeCollection = res.data.badgeCollection
 
+    //  converts badge type from object to string
     for (let i = 0; i < badgeCollection.length; i++) {
       badgeCollection[i].badge = badgeCollection[i].badge._id
     }
 
     selectedBadges.forEach(badgeId => {
       let included = false
+
       badgeCollection.forEach(badgeObj => {
         if (badgeId === badgeObj.badge) {
           badgeObj.count++
