@@ -119,7 +119,6 @@ const TeamMemberTasks = (props) => {
         }
 
         if (memberTimeEntriesPromises.length) {
-
           Promise.all(memberTimeEntriesPromises).then((data) => {
             // console.log('time entries: ', data);
             if (data[0].data.length === 0) {
