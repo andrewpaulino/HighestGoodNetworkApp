@@ -112,9 +112,11 @@ const TeamMemberTasks = (props) => {
           membersId.push(uniqueMembers[i]._id);
         }
 
-        memberTimeEntriesPromises.push(
-          httpService.get(ENDPOINTS.TIME_ENTRIES_USER_LIST(membersId)).catch((err) => { }),
-        );
+        if (membersId) {
+          memberTimeEntriesPromises.push(
+            httpService.get(ENDPOINTS.TIME_ENTRIES_USER_LIST(membersId)).catch((err) => { }),
+          );
+        }
 
         Promise.all(memberTimeEntriesPromises).then((data) => {
           // console.log('time entries: ', data);
