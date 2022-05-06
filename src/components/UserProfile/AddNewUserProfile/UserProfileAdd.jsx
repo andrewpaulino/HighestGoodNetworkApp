@@ -422,13 +422,15 @@ class AddUserProfile extends Component {
 
   onCreateNewUser = () => {
     this.props.fetchAllProjects();
-
+    console.log(getUserProfile)
     const initialUserProject = this.props.allProjects.projects.filter(
       ({ projectName }) => projectName === 'Orientation and Initial Setup',
     );
 
     this.setState({ projects: initialUserProject });
   };
+
+
 
   // Function to call TimeZoneService with location and key
   onClickGetTimeZone = () => {
