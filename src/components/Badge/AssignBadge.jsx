@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import AssignBadgePopup from './AssignBadgePopup';
 import {
   getFirstName,
-  getLastName,
+
   assignBadges,
   clearNameAndSelected,
   closeAlert,
