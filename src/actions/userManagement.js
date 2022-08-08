@@ -7,7 +7,7 @@ import {
   USER_PROFILE_DELETE,
 } from '../constants/userManagement';
 import { ENDPOINTS } from '../utils/URL';
-import { UserStatus } from '../utils/enums';
+import { UserFinalDayStatus, UserStatus } from '../utils/enums';
 import moment from 'moment';
 
 /**
@@ -32,9 +32,10 @@ export const getAllUserProfile = () => {
  * @param {*} user - the user to be updated
  * @param {*} status  - Active/InActive
  */
+
 export const updateUserStatus = (user, status, reactivationDate) => {
   const userProfile = Object.assign({}, user);
-  userProfile.isActive = status === UserStatus.Active;
+  userProfile.isActive = (status === UserStatus.Active);
   userProfile.reactivationDate = reactivationDate;
   const patchData = { status: status, reactivationDate: reactivationDate };
   if (status === UserStatus.InActive) {
@@ -44,14 +45,14 @@ export const updateUserStatus = (user, status, reactivationDate) => {
     patchData.endDate = undefined;
     userProfile.endDate = undefined;
   }
-
-  const updateProfilePromise = axios.patch(ENDPOINTS.USER_PROFILE(user._id), patchData);
+  const updateProfilePromise = axios.patch(ENDPOINTS.USER_PROFILE(user._id), patchData)
   return async (dispatch) => {
     updateProfilePromise.then((res) => {
       dispatch(userProfileUpdateAction(userProfile));
     });
   };
 };
+
 
 /**
  * delete an existing user
@@ -125,4 +126,31 @@ export const userProfileDeleteAction = (user) => {
     type: USER_PROFILE_DELETE,
     user,
   };
+};
+export const updateUserFinalDayStatus = (user,finalDayDate) => {
+  const userProfile = Object.assign({}, user);
+  userProfile.endDate = finalDayDate;
+  const patchData = {finalDate: finalDayDate}
+  if(finalDayDate === undefined){
+    patchData.endDate = undefined;
+    userProfile.endDate = undefined;
+  }else{
+    userProfile.endDate = moment(finalDayDate).format('YYYY-MM-DD');
+    patchData.endDate = moment(finalDayDate).format('YYYY-MM-DD');
+  }
+  const updateProfilePromise = axios.patch(ENDPOINTS.USER_PROFILE(user._id), patchData)
+  .then(function (response) {
+    console.log(response.data);
+    console.log(userProfile)
+    return response.data;})
+    .catch(function (error) {
+    console.log(error);});
+  
+  return async (dispatch) => {
+    updateProfilePromise.then((res) => {
+      dispatch(userProfileUpdateAction(userProfile));
+      
+    });
+  };
+  
 };

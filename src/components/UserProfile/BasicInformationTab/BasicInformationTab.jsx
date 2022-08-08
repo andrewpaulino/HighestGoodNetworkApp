@@ -5,14 +5,12 @@ import moment from 'moment';
 
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-
 import PauseAndResumeButton from 'components/UserManagement/PauseAndResumeButton';
-
 import TimeZoneDropDown from '../TimeZoneDropDown';
 import { useSelector } from 'react-redux';
 import { getUserTimeZone } from 'services/timezoneApiService';
 import hasPermission from 'utils/permissions';
-
+import SetUpFinalDayButton from 'components/UserManagement/SetUpFinalDayButtonfive';
 const Name = props => {
   const {
     userProfile,
@@ -563,6 +561,22 @@ const BasicInformationTab = (props) => {
           {canEdit && <PauseAndResumeButton isBigBtn={true} userProfile={userProfile} />}
         </Col>
       </Row>
+      <Row style={{ marginBottom: '10px' }}>
+        <Col>
+          <Label>
+            {
+            userProfile.endDate
+            ? 'End Date ' + moment(userProfile.endDate).format('YYYY-MM-DD')
+            : 'End Date '+ 'N/A'}
+            </Label>
+          
+        </Col>
+        <Col md="6">
+          {canEdit && <SetUpFinalDayButton isBigBtn={true} userProfile={userProfile} />}
+        </Col>
+      </Row>
+      
+      
     </div>
   );
 };
